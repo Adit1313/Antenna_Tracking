@@ -1,14 +1,8 @@
-// Sweep
-// by BARRAGAN <http://barraganstudio.com> 
-// This example code is in the public domain.
-
-
 #include <Servo.h> 
  
 Servo pan;  // pan servo
 Servo tilt; // tilt servo
 
-// Pin 13 has an LED connected on most Arduino boards.
 int led = 13;
 long lastTilt = 90L;
 long lastPan = 90L;
@@ -48,7 +42,7 @@ void loop()
     
     if (ch == 10)
     {
-      digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+      digitalWrite(led, HIGH);
       
       // Line feed is the command char
       if (cmd.startsWith("!!!PAN:"))
@@ -74,7 +68,7 @@ void loop()
              panVal = maxPWM;
            }
        
-           interpVal = map(panVal, minPWM, maxPWM, 0, 180);//((panVal-minPWM) * 180) / (maxPWM-minPWM);  
+           interpVal = map(panVal, minPWM, maxPWM, 0, 180); 
          
             if (interpVal > 180)
             {
@@ -86,11 +80,6 @@ void loop()
               interpVal = 0;
             }
 
-            //Serial.print("Pan=");
-            //Serial.println(interpVal);
-      
-            // This is the calibration constant for the pan which has a gear ratio
-            //interpVal = ((interpVal * 10) / 37) + 50;
             pan.write(interpVal);
             lastPan = interpVal;
         }
@@ -108,7 +97,7 @@ void loop()
              tiltVal = maxPWM;
            }
          
-           interpVal = map(tiltVal, minPWM, maxPWM, 0, 180);//((tiltVal-minPWM) * 90) / (maxPWM-minPWM);  
+           interpVal = map(tiltVal, minPWM, maxPWM, 0, 180);
            
             if (interpVal > 180)
             {
@@ -119,32 +108,26 @@ void loop()
             {
               interpVal = 0;
             }
-  
-            //Serial.print("Tilt=");
-            //Serial.println(interpVal);
-            
-            // This is the calibration constant
-            //interpVal = 150 - interpVal;
-  
-//            dir = 1;
-//            if (interpVal < lastTilt)
-//            {
-//              dir = -1;
-//            }
-//          
-//            if (tiltDelay > 0)
-//            {
-//              // Slow down tilt by stepping to it's destination
-//              for (pos = lastTilt; pos != interpVal; pos += dir)
-//              {                                  
-//                tilt.write(pos);              
-//                delay(tiltDelay);                       
-//              } 
-//            }
-//            else
-//            {
-//              tilt.write(interpVal);
-//            }
+
+            dir = 1;
+            if (interpVal < lastTilt)
+            {
+              dir = -1;
+            }
+          
+            if (tiltDelay > 0)
+            {
+              // Slow down tilt by stepping to it's destination
+              for (pos = lastTilt; pos != interpVal; pos += dir)
+              {                                  
+                tilt.write(pos);              
+                delay(tiltDelay);                       
+              } 
+            }
+            else
+            {
+              tilt.write(interpVal);
+            }
             tilt.write(interpVal);
             lastTilt = interpVal;
         }
@@ -159,7 +142,7 @@ void loop()
       tiltStr == "";
       cmd = "";
 
-      digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW         
+      digitalWrite(led, LOW);
     }
     else
     {
